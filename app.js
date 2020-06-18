@@ -21,9 +21,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/user', usersRouter);
+//lenamdn: Let's look at this file, and routes/users.js
+//Now go to your browser, type: 127.0.0.1:3000/users -> Should see "respond with a resource"
+/*app.use('/user', usersRouter);
 app.use('/testUser', usersRouter);
-app.use('/users/test', usersRouter);
+app.use('/users/test', usersRouter);*/
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
