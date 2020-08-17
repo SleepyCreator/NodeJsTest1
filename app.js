@@ -1,14 +1,34 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var session = require('express-session');
 var cookieParser = require('cookie-parser');
+//var session = require('express-session')
 var logger = require('morgan');
-
+var User = require('./model/user');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//var testMw = require('./express/middleware');
+r = require('rethinkdb')
+conn = r.connect()
+    //var testMw = require('./express/middleware');
 
 var app = express();
+//middleware
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: 'somesecret',
+    cookie: { maxAge: 60000 }
+}));
+
+var server = app.listen(3000, "127.0.0.1", function() {
+
+    var host = server.address().address
+    var port = server.address().port
+
+    console.log("Example app listening at http://%s:%s", host, port)
+
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,13 +42,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);;
+app.use('/register', indexRouter);
+r.connect({ host: 'localhost', port: 28015 }, function(err, conn) {});
 //app.use('/help', testMw);
 //lenamdn: Let's look at this file, and routes/users.js
 //Now go to your browser, type: 127.0.0.1:3000/users -> Should see "respond with a resource"
 // app.use('/user', usersRouter);
 // app.use('/testUser', usersRouter);
 // app.use('/users/test', usersRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
